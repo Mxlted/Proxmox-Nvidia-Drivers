@@ -18,23 +18,22 @@ This guide provides step-by-step instructions to set up NVIDIA drivers on a Prox
 To install the NVIDIA drivers on the Proxmox host, follow these steps:
 
 1. **Create a directory for NVIDIA drivers:**
-
-   `mkdir /opt/nvidia`
-   
-   `cd /opt/nvidia`
-
+```bash
+mkdir /opt/nvidia
+cd /opt/nvidia
+```
 2. **Download the NVIDIA driver:**
-
-   `wget https://download.nvidia.com/XFree86/Linux-x86_64/560.28.03/NVIDIA-Linux-x86_64-560.28.03.run`
-
+```bash
+wget https://download.nvidia.com/XFree86/Linux-x86_64/560.28.03/NVIDIA-Linux-x86_64-560.28.03.run
+```
 3. **Make the driver installer executable:**
-
-   `chmod +x NVIDIA-Linux-x86_64-560.28.03.run`
-
+```bash
+chmod +x NVIDIA-Linux-x86_64-560.28.03.run
+```
 4. **Run the installer with the necessary options:**
-
-   `./NVIDIA-Linux-x86_64-560.28.03.run --no-questions --ui=none --disable-nouveau`
-
+```bash
+./NVIDIA-Linux-x86_64-560.28.03.run --no-questions --ui=none --disable-nouveau
+```
 This will install the NVIDIA drivers on the Proxmox host, allowing it to communicate with the GPU.
 
 ## Setup NVIDIA Drivers in a Container
@@ -42,23 +41,22 @@ This will install the NVIDIA drivers on the Proxmox host, allowing it to communi
 To enable a container to communicate with the GPU and the installed NVIDIA driver, follow these steps within the container:
 
 1. **Create a directory for NVIDIA drivers:**
-
-   `mkdir /opt/nvidia`
-   
-   `cd /opt/nvidia`
-
+```bash
+mkdir /opt/nvidia
+cd /opt/nvidia
+```
 2. **Download the NVIDIA driver:**
-
-   `wget https://download.nvidia.com/XFree86/Linux-x86_64/560.28.03/NVIDIA-Linux-x86_64-560.28.03.run`
-
+```bash
+wget https://download.nvidia.com/XFree86/Linux-x86_64/560.28.03/NVIDIA-Linux-x86_64-560.28.03.run
+```
 3. **Make the driver installer executable:**
-
-   `chmod +x NVIDIA-Linux-x86_64-560.28.03.run`
-
+```bash
+chmod +x NVIDIA-Linux-x86_64-560.28.03.run
+```
 4. **Run the installer with the following options:**
-
-   `sudo ./NVIDIA-Linux-x86_64-560.28.03.run --no-kernel-module`
-
+```bash
+sudo ./NVIDIA-Linux-x86_64-560.28.03.run --no-kernel-module
+```
 This process will install the NVIDIA drivers within the container without attempting to load the kernel module.
 
 ## Troubleshooting
