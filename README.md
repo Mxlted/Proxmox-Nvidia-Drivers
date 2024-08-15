@@ -59,6 +59,8 @@ sudo ./NVIDIA-Linux-x86_64-560.28.03.run --no-kernel-module
 ```
 This process will install the NVIDIA drivers within the container without attempting to load the kernel module.
 
+# **Then REBOOT the container to finalize!**
+
 ## Troubleshooting
 
 - **Driver Version Compatibility:** Ensure the NVIDIA driver version is compatible with your GPU model. Check NVIDIA's [official website](https://www.nvidia.com/Download/index.aspx) for more details.
