@@ -150,8 +150,6 @@ reboot
 
 ### 6. Install NVIDIA Container Toolkit (New Versions)
 
-Once `nvidia-smi` works correctly on the host:
-
 ```bash
 apt install -y nvidia-container-toolkit
 ```
