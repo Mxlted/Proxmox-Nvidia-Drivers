@@ -22,17 +22,19 @@ To install the NVIDIA drivers on the Proxmox host, follow these steps:
 mkdir /opt/nvidia
 cd /opt/nvidia
 ```
-2. **Download the NVIDIA driver:**
+2. **Download the NVIDIA driver**
+
+   **(Scroll to the bottom and grab the latest x64 version from here https://download.nvidia.com/XFree86/Linux-x86_64/) :**
 ```bash
-wget https://download.nvidia.com/XFree86/Linux-x86_64/580.105.08/NVIDIA-Linux-x86_64-580.105.08.run
+wget https://download.nvidia.com/XFree86/Linux-x86_64/590.48.01/NVIDIA-Linux-x86_64-590.48.01.run
 ```
 3. **Make the driver installer executable:**
 ```bash
-chmod +x NVIDIA-Linux-x86_64-580.105.08.run
+chmod +x NVIDIA-Linux-x86_64-590.48.01.run
 ```
 4. **Run the installer with the necessary options:**
 ```bash
-./NVIDIA-Linux-x86_64-580.105.08.run --no-questions --ui=none --disable-nouveau
+./NVIDIA-Linux-x86_64-590.48.01.run --no-questions --ui=none --disable-nouveau
 ```
 This will install the NVIDIA drivers on the Proxmox host, allowing it to communicate with the GPU.
 
@@ -47,15 +49,15 @@ cd /opt/nvidia
 ```
 2. **Download the NVIDIA driver:**
 ```bash
-wget https://download.nvidia.com/XFree86/Linux-x86_64/580.105.08/NVIDIA-Linux-x86_64-580.105.08.run
+wget https://download.nvidia.com/XFree86/Linux-x86_64/590.48.01/NVIDIA-Linux-x86_64-590.48.01.run
 ```
 3. **Make the driver installer executable:**
 ```bash
-chmod +x NVIDIA-Linux-x86_64-580.105.08.run
+chmod +x NVIDIA-Linux-x86_64-590.48.01.run
 ```
 4. **Run the installer with the following options:**
 ```bash
-sudo ./NVIDIA-Linux-x86_64-580.105.08.run --no-kernel-module
+sudo ./NVIDIA-Linux-x86_64-590.48.01.run --no-kernel-module
 ```
 This process will install the NVIDIA drivers within the container without attempting to load the kernel module.
 
