@@ -139,7 +139,7 @@ chmod +x NVIDIA-Linux-x86_64-595.71.05.run
 ### 2. Install Without the Kernel Module
 
 ```bash
-./NVIDIA-Linux-x86_64-595.71.05.run --no-kernel-module
+./NVIDIA-Linux-x86_64-595.71.05.run --no-kernel-module --no-questions --ui=none
 ```
 
 ### 3. Reboot and Verify
