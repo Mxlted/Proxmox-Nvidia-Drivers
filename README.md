@@ -162,7 +162,7 @@ Consumer-grade NVIDIA GPUs limit the number of concurrent NVENC encoding session
 
 Driver 595.71.05 is supported for both the NVENC and NvFBC patches.
 
-### Apply on the Host
+### Apply on the Host and/or Container
 
 ```bash
 cd /opt/nvidia
