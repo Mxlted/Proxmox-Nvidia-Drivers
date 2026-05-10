@@ -32,19 +32,19 @@ cd /opt/nvidia
 2. Download the driver. Grab the latest x64 `.run` file from https://download.nvidia.com/XFree86/Linux-x86_64/
 
 ```bash
-wget https://download.nvidia.com/XFree86/Linux-x86_64/590.48.01/NVIDIA-Linux-x86_64-590.48.01.run
+wget https://download.nvidia.com/XFree86/Linux-x86_64/595.71.05/NVIDIA-Linux-x86_64-595.71.05.run
 ```
 
 3. Make it executable:
 
 ```bash
-chmod +x NVIDIA-Linux-x86_64-590.48.01.run
+chmod +x NVIDIA-Linux-x86_64-595.71.05.run
 ```
 
 4. Run the installer:
 
 ```bash
-./NVIDIA-Linux-x86_64-590.48.01.run --no-questions --ui=none --disable-nouveau
+./NVIDIA-Linux-x86_64-595.71.05.run --no-questions --ui=none --disable-nouveau
 ```
 
 ---
@@ -63,19 +63,19 @@ cd /opt/nvidia
 2. Download the same driver version used on the host:
 
 ```bash
-wget https://download.nvidia.com/XFree86/Linux-x86_64/590.48.01/NVIDIA-Linux-x86_64-590.48.01.run
+wget https://download.nvidia.com/XFree86/Linux-x86_64/595.71.05/NVIDIA-Linux-x86_64-595.71.05.run
 ```
 
 3. Make it executable:
 
 ```bash
-chmod +x NVIDIA-Linux-x86_64-590.48.01.run
+chmod +x NVIDIA-Linux-x86_64-595.71.05.run
 ```
 
 4. Run the installer without the kernel module:
 
 ```bash
-./NVIDIA-Linux-x86_64-590.48.01.run --no-kernel-module
+./NVIDIA-Linux-x86_64-595.71.05.run --no-kernel-module
 ```
 
 5. Reboot the container to finalize:
