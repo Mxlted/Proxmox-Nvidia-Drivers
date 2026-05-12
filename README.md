@@ -1,6 +1,6 @@
 # NVIDIA Driver Setup on Proxmox
 
-Step-by-step instructions for installing NVIDIA drivers on a Proxmox host and within a container for GPU passthrough.
+Step-by-step instructions for installing NVIDIA drivers on a Proxmox host and exposing the GPU to an LXC container.
 
 ## Table of Contents
 
@@ -125,9 +125,91 @@ dkms status
 
 ## Setup in a Container
 
-The container installation follows the same download steps as the host but skips loading the kernel module since the host already owns it. The driver version **must match** the host.
+The container installation has two parts:
 
-### 1. Download the Driver
+1. Pass the NVIDIA device nodes from the Proxmox host into the LXC container.
+2. Install the matching NVIDIA userspace driver inside the container without installing a kernel module.
+
+The driver version inside the container **must match** the host driver version. The container must use `--no-kernel-module` because the Proxmox host owns the NVIDIA kernel module.
+
+### 1. Confirm NVIDIA Devices on the Host
+
+On the Proxmox host, verify that the NVIDIA device nodes exist:
+
+```bash
+ls -l /dev/nvidia*
+```
+
+Expected output should look similar to this:
+
+```text
+crw-rw-rw- 1 root root 195,   0 /dev/nvidia0
+crw-rw-rw- 1 root root 195, 255 /dev/nvidiactl
+crw-rw-rw- 1 root root 195, 254 /dev/nvidia-modeset
+crw-rw-rw- 1 root root 511,   0 /dev/nvidia-uvm
+crw-rw-rw- 1 root root 511,   1 /dev/nvidia-uvm-tools
+```
+
+For this setup, the important major numbers are:
+
+```text
+195 = nvidia0 / nvidiactl / nvidia-modeset
+511 = nvidia-uvm / nvidia-uvm-tools
+```
+
+If your system shows different major numbers, use the numbers from your own `ls -l /dev/nvidia*` output.
+
+### 2. Stop the Container
+
+Replace `CTID` with your container ID:
+
+```bash
+pct stop CTID
+```
+
+### 3. Add NVIDIA Device Passthrough to the LXC Config
+
+Edit the container config on the Proxmox host:
+
+```bash
+nano /etc/pve/lxc/CTID.conf
+```
+
+Add the following lines:
+
+```conf
+lxc.cgroup2.devices.allow: c 195:* rwm
+lxc.cgroup2.devices.allow: c 511:* rwm
+
+lxc.mount.entry: /dev/nvidia0 dev/nvidia0 none bind,optional,create=file
+lxc.mount.entry: /dev/nvidiactl dev/nvidiactl none bind,optional,create=file
+lxc.mount.entry: /dev/nvidia-modeset dev/nvidia-modeset none bind,optional,create=file
+lxc.mount.entry: /dev/nvidia-uvm dev/nvidia-uvm none bind,optional,create=file
+lxc.mount.entry: /dev/nvidia-uvm-tools dev/nvidia-uvm-tools none bind,optional,create=file
+```
+
+Save the file.
+
+### 4. Start the Container and Confirm Device Nodes
+
+Start and enter the container:
+
+```bash
+pct start CTID
+pct enter CTID
+```
+
+Inside the container, verify that the NVIDIA devices are visible:
+
+```bash
+ls -l /dev/nvidia*
+```
+
+If the devices do not appear inside the container, recheck `/etc/pve/lxc/CTID.conf` and confirm the major numbers match the host.
+
+### 5. Download the Driver Inside the Container
+
+Run these commands inside the container. Use the same driver version as the Proxmox host.
 
 ```bash
 mkdir -p /opt/nvidia
@@ -136,21 +218,30 @@ wget https://download.nvidia.com/XFree86/Linux-x86_64/595.71.05/NVIDIA-Linux-x86
 chmod +x NVIDIA-Linux-x86_64-595.71.05.run
 ```
 
-### 2. Install Without the Kernel Module
+### 6. Install Without the Kernel Module
+
+Run this inside the container:
 
 ```bash
 ./NVIDIA-Linux-x86_64-595.71.05.run --no-kernel-module --no-questions --ui=none
 ```
 
-### 3. Reboot and Verify
+Do not use `--dkms` inside the container. Do not install the kernel module inside the container.
+
+### 7. Verify Inside the Container
+
+Run:
 
 ```bash
-reboot
+nvidia-smi
 ```
 
-After reboot:
+If it works, the LXC container can access the GPU.
+
+If `nvidia-smi` is found but fails, confirm that the container driver version matches the host driver version exactly:
 
 ```bash
+cat /proc/driver/nvidia/version
 nvidia-smi
 ```
 
@@ -306,6 +397,6 @@ bash ./patch-fbc.sh  # only if you use NvFBC
 
 - **Secure Boot** - if Secure Boot is enabled, DKMS-built kernel modules must be signed with a Machine Owner Key (MOK). You will need to generate a signing key, enroll it via `mokutil`, and configure DKMS to sign modules automatically. See the [Proxmox vGPU wiki](https://pve.proxmox.com/wiki/NVIDIA_vGPU_on_Proxmox_VE) for details.
 
-- **Container can't see the GPU** - ensure the container's driver version exactly matches the host. The container must use `--no-kernel-module` since the host owns the kernel module.
+- **Container can't see the GPU** - confirm the Proxmox host has `/dev/nvidia*` device nodes, then make sure those devices are passed into the LXC config with `lxc.cgroup2.devices.allow` and `lxc.mount.entry` lines. The container driver version must exactly match the host, and the container must use `--no-kernel-module` since the host owns the kernel module.
 
 - For additional help, refer to the [Proxmox community forums](https://forum.proxmox.com/) or NVIDIA support.
